@@ -1,0 +1,25 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/cicd/cicd-test
+    overwrite: true
+hooks:
+  BeforeInstall:
+    - location: server/scripts/before_install.sh
+      timeout: 300
+      runas: ec2-user
+      script: |
+        chmod +x /home/ec2-user/cicd-test/server/scripts/application_stop.sh
+        chmod +x /home/ec2-user/cicd-test/server/scripts/before_install.sh
+        chmod +x /home/ec2-user/cicd-test/server/scripts/application_start.sh
+  ApplicationStop:
+    - location: server/scripts/application_stop.sh
+      timeout: 300
+      runas: ec2-user
+  ApplicationStart:
+    - location: server/scripts/application_start.sh
+      timeout: 300
+      runas: ec2-user
+      script: |
+        source /home/ec2-user/cicd-test/server/scripts/application_start.sh
